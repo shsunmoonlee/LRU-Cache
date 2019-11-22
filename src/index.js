@@ -2,7 +2,8 @@ class ListNode {
   constructor(key, value) {
     this.key = key;
     this.value = value;
-    this.prev = this.next = null;
+    this.prev = null;
+    this.next = null;
   }
 }
 
@@ -22,7 +23,7 @@ class LRUCache {
    * @return {number}
    */
   get(key) {
-    let node = this.map[key];
+    const node = this.map[key];
     if (node === null) {
       return -1;
     }
@@ -37,9 +38,9 @@ class LRUCache {
    * @return {void}
    */
   put(key, value) {
-    let node = this.map[key];
+    const node = this.map[key];
     if (!node) {
-      let newNode = new ListNode();
+      const newNode = new ListNode();
 
       newNode.key = key;
       newNode.value = value;
@@ -58,12 +59,12 @@ class LRUCache {
   }
 
   removeLRUEntry() {
-    let tail = this.popTail();
+    const tail = this.popTail();
     delete this.map[tail.key];
     --this.totalItemsInCache;
   }
   popTail() {
-    let tailItem = this.tail.prev;
+    const tailItem = this.tail.prev;
     this.removeFromList(tailItem);
     return tailItem;
   }
@@ -74,8 +75,8 @@ class LRUCache {
     this.head.next = node;
   }
   removeFromList(node) {
-    let savedPrev = node.prev;
-    let savedNext = node.next;
+    const savedPrev = node.prev;
+    const savedNext = node.next;
     savedPrev.next = savedNext;
     savedNext.prev = savedPrev;
   }
