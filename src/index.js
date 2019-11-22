@@ -24,7 +24,7 @@ class LRUCache {
    */
   get(key) {
     const node = this.map[key];
-    if (node === null) {
+    if (!node) {
       return -1;
     }
     // Item has been accessed. Move to the front of the cache.
@@ -49,7 +49,7 @@ class LRUCache {
       this.addToFront(newNode);
       this.totalItemsInCache++;
 
-      if (this.totalItemsInCache > this.maxCapacity) {
+      if (this.totalItemsInCache > this.capacity) {
         this.removeLRUEntry();
       }
     } else {

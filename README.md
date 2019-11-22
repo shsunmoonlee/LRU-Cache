@@ -5,6 +5,31 @@
 import LRUCache from 'LRU-Cache'
 
 ```js
+let lruCache = new LRUCache(5); // size 5 for example.
+/**
+ * @param {number} key
+ * @return {number}
+ */
+lruCache.get(key);
+
+/**
+ * @param {number} key
+ * @param {number} value
+ * @return {void}
+ */
+lruCache.put(key, value);
+
+lruCache.removeLRUEntry();
+
+lruCache.popTail();
+
+lruCache.addToFront(node);
+
+lruCache.removeFromList(node);
+
+lruCache.moveToHead(node);
+
+// test
 describe("Awesome test.", () => {
   it("should test default awesome function", () => {
     let obj = new LRUCache(2); // size of LRUCache
