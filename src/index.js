@@ -2,34 +2,32 @@ class ListNode {
   constructor(key, value) {
     this.key = key;
     this.value = value;
-    this.prev = null;
-    this.next = null;
+    this.next = this.prev = null;
   }
 }
 
 class LRUCache {
   constructor(capacity) {
-    this.map = {};
-    this.totalItemsInCache = 0;
     this.capacity = capacity;
+    this.size = 0;
     this.head = new ListNode();
     this.tail = new ListNode();
+    this.cache = new Map();
     this.head.next = this.tail;
     this.tail.prev = this.head;
   }
 
   /**
    * @param {number} key
-   * @return {number}
+   * @return {number} value
    */
   get(key) {
-    const node = this.map[key];
-    if (!node) {
-      return -1;
+    const node = this.cache.get(key);
+    if (node) {
+      this.moveToHead(node);
+      return node.value;
     }
-    // Item has been accessed. Move to the front of the cache.
-    this.moveToHead(node);
-    return node.value;
+    return -1;
   }
 
   /**
@@ -38,51 +36,45 @@ class LRUCache {
    * @return {void}
    */
   put(key, value) {
-    const node = this.map[key];
-    if (!node) {
-      const newNode = new ListNode();
-
-      newNode.key = key;
-      newNode.value = value;
-
-      this.map[key] = newNode;
-      this.addToFront(newNode);
-      this.totalItemsInCache++;
-
-      if (this.totalItemsInCache > this.capacity) {
-        this.removeLRUEntry();
-      }
-    } else {
+    const node = this.cache.get(key);
+    if (node) {
       node.value = value;
       this.moveToHead(node);
+    } else {
+      this.addNode(new ListNode(key, value));
+      if (this.size > this.capacity) {
+        this.popTail();
+      }
     }
   }
 
-  removeLRUEntry() {
-    const tail = this.popTail();
-    delete this.map[tail.key];
-    --this.totalItemsInCache;
-  }
   popTail() {
-    const tailItem = this.tail.prev;
-    this.removeFromList(tailItem);
-    return tailItem;
+    const node = this.tail.prev;
+    this.removeNode(node);
   }
-  addToFront(node) {
-    node.prev = this.head;
-    node.next = this.head.next;
-    this.head.next.prev = node;
-    this.head.next = node;
-  }
-  removeFromList(node) {
-    const savedPrev = node.prev;
-    const savedNext = node.next;
-    savedPrev.next = savedNext;
-    savedNext.prev = savedPrev;
-  }
+
   moveToHead(node) {
-    this.removeFromList(node);
-    this.addToFront(node);
+    this.removeNode(node);
+    this.addNode(node);
+  }
+
+  removeNode(node) {
+    const { prev } = node;
+    const { next } = node;
+    prev.next = next;
+    next.prev = prev;
+    this.cache.delete(node.key);
+    this.size--;
+  }
+
+  addNode(node) {
+    const { next } = this.head;
+    node.prev = this.head;
+    this.head.next = node;
+    node.next = next;
+    next.prev = node;
+    this.cache.set(node.key, node);
+    this.size++;
   }
 }
 

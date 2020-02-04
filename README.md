@@ -1,4 +1,8 @@
-# Simple LRU Cache
+# Classic LRU Cache in JavaScript. Goal: Real World Implementation
+
+## Gist
+
+[Gist](https://gist.github.com/SeunghunSunmoonLee/1a3e78d0c4efa5dce4c1272d7067818d)
 
 ## Usage
 
@@ -8,7 +12,7 @@ import LRUCache from 'LRU-Cache'
 let lruCache = new LRUCache(5); // size 5 for example.
 /**
  * @param {number} key
- * @return {number}
+ * @return {number} value
  */
 lruCache.get(key);
 
@@ -19,13 +23,11 @@ lruCache.get(key);
  */
 lruCache.put(key, value);
 
-lruCache.removeLRUEntry();
+lruCache.removeNode(node);
 
 lruCache.popTail();
 
-lruCache.addToFront(node);
-
-lruCache.removeFromList(node);
+lruCache.addNode(node);
 
 lruCache.moveToHead(node);
 
